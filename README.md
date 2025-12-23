@@ -1,24 +1,8 @@
 
 An intelligent virtual assistant for browsing and searching vehicles in a dealership database, featuring natural language interaction and MCP (Model Context Protocol) architecture.
-📋 Table of Contents
+## 📋 Table of Contents**
 
-Overview
-Features
-Architecture
-Prerequisites
-Installation
-Project Structure
-Usage
-Database Schema
-MCP Protocol
-Examples
-Technologies Used
-Development
-Troubleshooting
-Contributing
-License
-
-🎯 Overview
+## 🎯 Overview**:
 This project implements a conversational virtual assistant that helps users find vehicles in a dealership database. Instead of traditional menu-based interfaces, the assistant engages in natural conversation to understand user preferences and requirements.
 Key Highlights
 
@@ -28,33 +12,34 @@ Intelligent Search: The assistant asks relevant follow-up questions based on con
 Rich Database: 100+ vehicles with realistic attributes
 Terminal-Based: Runs entirely in the command line
 
-🏗️ Architecture
+## 🏗️ Architecture**
 
 Description of Flowchart:
 ![Data → processed Flowchart](dev/output.png)
-    Data → processed by Agent
-    Agent → invokes Reflection Invoker
-    Reflection Invoker → dynamically selects and calls Processing Logic
-    Processing Logic → returns results back to the agent for further steps.
+    - **Data**: → processed by Agent
+    - **Agent**: → invokes Reflection Invoker
+    - **Reflection**: Invoker → dynamically selects and calls Processing Logic
+    - **Processing Logic**: → returns results back to the agent for further steps.
 
-✨ Features
+## ✨ Features
 
-🤖 Virtual Agent: Conversational AI that understands user intent
-💬 Natural Dialogue: Ask questions in your own words
-🔍 Smart Filtering: Filter by brand, model, year, fuel type, price range, and more
-📊 Detailed Results: View brand, model, year, color, mileage, and price
-🔄 MCP Protocol: Proper client-server-database architecture
-📝 100+ Vehicles: Pre-populated database with realistic data
-🎨 User-Friendly: Clear, formatted output in the terminal
+- **🤖 Virtual Agent**: Conversational AI that understands user intent
 
-Communication Flow
+- **💬 Natural Dialogue**: Ask questions in your own words
+- **🔍 Smart Filtering**: Filter by brand, model, year, fuel type, price range, and more
+- **📊 Detailed Results**: View brand, model, year, color, mileage, and price
+- **🔄 MCP Protocol**: Proper client-server-database architecture
+- **📝 100+ Vehicles**: Pre-populated database with realistic data
+- **🎨 User-Friendly**: Clear, formatted output in the terminal
 
-User → Types natural language query in terminal
-Client → Extracts filters and sends to MCP Server
-MCP Server → Validates, queries database, returns results
-Client → Formats and displays results to user
+## Communication Flow
 
-🔧 Prerequisites
+- **User**: → Types natural language query in terminal
+- **Client**: → Extracts filters and sends to MCP Server
+- **MCP Server**: → Validates, queries database, returns results
+- **Client** → Formats and displays results to user
+
+## 🔧 Prerequisites
 Before you begin, ensure you have the following installed:
 
 Python 3.8+
