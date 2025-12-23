@@ -1,0 +1,9 @@
+{
+    "mcpServers": {
+        "sql_server": {
+            "command": "uv",
+            "args": ["run", "mcp_server/sql_runner.py"]
+        }
+    }
+}
+  
