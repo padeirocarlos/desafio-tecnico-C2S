@@ -1,6 +1,6 @@
 
 An intelligent virtual assistant for browsing and searching vehicles in a dealership database, featuring natural language interaction and MCP (Model Context Protocol) architecture.
-## 📋 Table of Contents**
+## 📋 Table of Contents
 
 ## 🎯 Overview**:
 This project implements a conversational virtual assistant that helps users find vehicles in a dealership database. Instead of traditional menu-based interfaces, the assistant engages in natural conversation to understand user preferences and requirements.
@@ -12,19 +12,19 @@ Intelligent Search: The assistant asks relevant follow-up questions based on con
 Rich Database: 100+ vehicles with realistic attributes
 Terminal-Based: Runs entirely in the command line
 
-## 🏗️ Architecture**
+## 🏗️ Architecture
 
-Description of Flowchart:
 ![Data → processed Flowchart](dev/output.png)
-    - **Data**: → processed by Agent
-    - **Agent**: → invokes Reflection Invoker
-    - **Reflection**: Invoker → dynamically selects and calls Processing Logic
-    - **Processing Logic**: → returns results back to the agent for further steps.
+
+## Description of Flowchart:
+- **Data**: → processed by Agent
+- **Agent**: → invokes Reflection Invoker
+- **Reflection**: Invoker → dynamically selects and calls Processing Logic
+- **Processing Logic**: → returns results back to the agent for further steps.
 
 ## ✨ Features
 
 - **🤖 Virtual Agent**: Conversational AI that understands user intent
-
 - **💬 Natural Dialogue**: Ask questions in your own words
 - **🔍 Smart Filtering**: Filter by brand, model, year, fuel type, price range, and more
 - **📊 Detailed Results**: View brand, model, year, color, mileage, and price
@@ -41,10 +41,9 @@ Description of Flowchart:
 
 ## 🔧 Prerequisites
 Before you begin, ensure you have the following installed:
-
-Python 3.8+
-pip (Python package manager)
-Virtual environment (recommended)
+- **Python**: 3.8+
+- **pip**: (Python package manager)
+- **Virtual environment**: (recommended)
 
 ## 🚀 How to Run
 
