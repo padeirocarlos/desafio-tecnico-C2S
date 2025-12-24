@@ -378,19 +378,31 @@ def sql_query_executer(sql_query:str) -> str:
 
     prompt1 = f""" 
         IMPORTANT:
-        - You must exclusively use only this tools 'sql_query_execute' provided in mcp_server to execute this given SQL quer '{sql_query}' to retrieve the list of vehicle
-        - Execute this given sql query '{sql_query}' aganist SQLite database containing car data and return the results in STRICT format below. 
+        - You must exclusively use only this tools sql_query_execute(sql_query='{sql_query}') provided 
+          in mcp_server to execute this given tool sql_query_execute(sql_query'{sql_query}') to retrieve the list of vehicle
         - Do not use any other tools, methods, or approaches for this task."""
     
     prompt2 = f"""  
         IMPORTANT:
         List of vehicle brands and their prices
-        - You must exclusively use the 'brand_and_min_price' tool from mcp_server to retrieve the list of vehicle brands and their minimun prices. 
+        - You must exclusively use the 'brand_and_min_price()' tool from mcp_server to retrieve the list of vehicle brands and their minimun prices. 
         - Do not use any other tools or methods for this task.
         - Return the results in STRICT format below"""
     
+    prompt3 = f""" 
+        For each vehicle found, extract and organize the following information:
+        - Brand (Marca)
+        - Model (Modelo)
+        - Year (Ano)
+        - Color (Cor)
+        - engine_type
+        - Mileage (Quilometragem)
+        - Price (Preço)
+        - fuel_type
+        - Other preferences (e.g., color, mileage, features) """
+    
     if sql_query:
-        _prompt = prompt1
+        _prompt = prompt1 + f" \n {prompt3} \n"
     else:
         _prompt = prompt2
     
@@ -405,7 +417,7 @@ def sql_query_executer(sql_query:str) -> str:
         respond in this STRICT format:
         {{
             "comment":"Here detailed 2-3 sentences explaining the meaning of the sql query result",
-            "sql_result":"<final SQL Result well formatted>"
+            "sql_result":"here the results vehicles extract from tools execution"
         }}
         """
     return prompt

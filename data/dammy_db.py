@@ -47,7 +47,7 @@ COLORS = [
     "Yellow", "Orange", "Brown", "Beige", "Gold", "Purple", "Navy"
 ]
 
-def db_details_schema(table_name:str = "vehicles", db_path: str="data/cars.db") -> str:
+def db_details_schema(table_name:str = "vehicles", db_path: str="mcp_server/cars.db") -> str:
     conn = sqlite3.connect(db_path)
     cur = conn.cursor()
     cur.execute(f"PRAGMA table_info({table_name})")
@@ -127,7 +127,7 @@ def generate_car_data(data_size:int=150) -> List[Car]:
     
     return vehicles
 
-def create_database(db_path: str="data/cars.db"):
+def create_database(db_path: str="mcp_server/cars.db"):
     """Create SQLite database and vehicles table"""
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()

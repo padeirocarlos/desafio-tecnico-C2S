@@ -458,7 +458,7 @@ def sql_query_execute(sql_query: str) -> List[Dict]:
     if sql_query:
         sql_purify = sql_query
     try:
-        conn = sqlite3.connect("data/cars.db")
+        conn = sqlite3.connect("mcp_server/cars.db")
         q = sql_purify.strip().removeprefix("```sql").removesuffix("```").strip()
         result = pd.read_sql_query(q, conn)
         result = result.to_dict(orient="records")

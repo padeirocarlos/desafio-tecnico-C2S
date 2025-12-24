@@ -277,7 +277,7 @@ async def sql_generater_node(state: WorkflowState) -> WorkflowState:
             while recheck_code and sql_error_count < MAX_TRY_ERROR:
                 
                 if sql_query_error:
-                    result = await vehicleAgentic.sql_generater_agent(user_query=sql_query, error_message=sql_query_error,model_name="olmo-3:7b", error_fixer=True) # qwen3-coder qwen2.5-coder olmo-3:7b
+                    result = await vehicleAgentic.sql_generater_agent(user_query=sql_query, error_message=sql_query_error,model_name="qwen2.5-coder", error_fixer=True) # qwen3-coder qwen2.5-coder olmo-3:7b
                 else:
                     result = await vehicleAgentic.sql_generater_agent(user_query=summary, model_name="qwen2.5-coder")
                 
@@ -338,10 +338,10 @@ async def sql_purify_node(state: WorkflowState) -> WorkflowState:
             while recheck_code and sql_error_count < MAX_TRY_ERROR:
                 
                 if sql_purify_error:
-                    result = await vehicleAgentic.sql_purify_agent(user_query=sql_purify_error, sql_query=sql_query, model_name="qwen3-coder", error_fixer=True)
+                    result = await vehicleAgentic.sql_purify_agent(user_query=sql_purify_error, sql_query=sql_query, model_name="qwen2.5-coder", error_fixer=True)
                 else:
-                    result = await vehicleAgentic.sql_purify_agent(user_query=filter_summary, sql_query=sql_query, model_name="qwen3-coder") 
-                                                                                        # gemini deepseek deepseek-r1 qwen3-coder qwen2.5-coder olmo-3:7b
+                    result = await vehicleAgentic.sql_purify_agent(user_query=filter_summary, sql_query=sql_query, model_name="qwen2.5-coder") 
+                                                                            # gemini deepseek deepseek-r1 qwen3-coder qwen2.5-coder olmo-3:7b
             
                 feedback = result.get("feedback", "")
                 sql_purify = result.get("sql_purify", "")
@@ -397,8 +397,11 @@ async def sql_query_execute_node(state: WorkflowState) -> WorkflowState:
                 sql_purify = sql_query
             
             try:
-                sql_result = sql_query_execute(sql_query=sql_query)
-                comment = state.get("summary", "")
+                # sql_result = sql_query_execute(sql_query=sql_query)
+                result = await vehicleAgentic.sql_query_executer_agent(sql_query=sql_query, model_name="mistral") 
+                                                                        # functiongemma mistral gemini gpt-oss:20b deepseek deepseek-r1 qwen3-coder qwen2.5-coder olmo-3:7b
+                comment = result.get("summary")
+                sql_result = result.get("sql_result")
                 
                 refined_time = (time.perf_counter() - start_time) * 1000
                 logger.info(f" ✅ 🎯 SQL Query executer node success full. \n SQL Result: {sql_result} \n comment: {comment} \n Completed in : {float(refined_time):.2f}ms")
@@ -459,7 +462,7 @@ def sql_query_execute(sql_query: str) -> List[Dict]:
     if sql_query:
         sql_purify = sql_query
     try:
-        conn = sqlite3.connect("data/cars.db")
+        conn = sqlite3.connect("mcp_server/cars.db")
         q = sql_purify.strip().removeprefix("```sql").removesuffix("```").strip()
         result = pd.read_sql_query(q, conn)
         result = result.to_dict(orient="records")

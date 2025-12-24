@@ -8,6 +8,9 @@ from mcp.client.stdio import stdio_client
 from mcp import ClientSession, StdioServerParameters
 
 load_dotenv(override=True)
+# Testing
+#   cd ./mcp_server/
+#   mcp_server$ npx @modelcontextprotocol/inspector python sql_runner.py 
 
 class ToolDefinition(TypedDict):
     name: str

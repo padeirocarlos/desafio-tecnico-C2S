@@ -13,6 +13,7 @@ class ApiConfig(StrEnum):
     # Model name
     DEEP_SEEK_MODEL = "deepseek-chat"
     DEEP_SEEK_R1_MODEL = "deepseek-r1"
+    FUNCTIONGEMMA_MODEL = "functiongemma:latest"
     GEMINI_MODEL = "gemini-2.0-flash"
     OPENAI_MODEL = "gpt-4o-mini"
     ANTHROPIC_MODEL = "claude-sonnet-4-5"
@@ -26,13 +27,13 @@ class ApiConfig(StrEnum):
     LLMA_QWEN_3_MODEL = "qwen3:latest"
     LLMA_32_MODEL = "llama3.2:latest"
     LLMA_3_MODEL =  "llama3:latest"
+    MISTRAL_MODEL =  "mistral:latest"
     
     # VISION and Multi Model name
     LLMA_GEMMA_4B_MODEL = "gemma3:4b"
     LLMA_GEMMA_1B_MODEL = "gemma3:1b"
     LLMA_GEMMA_12B_MODEL = "gemma3:12b"
     LLMA_QWEN3_CODER_MODEL = "qwen3-coder:30b"
-    
     
     LLMA_QWEN2_MODEL = "siasi/qwen2-vl-7b-instruct"
     LLMA_QWEN3_MODEL = "qwen3-vl:8b"

@@ -26,7 +26,9 @@ set_default_openai_client(ollama_openai, use_for_tracing=False)
 
 # client configuration for which ollama openai local use
 deepseek_r1_client = OpenAIChatCompletionsModel(model=ApiConfig.DEEP_SEEK_R1_MODEL, openai_client=ollama_openai) 
-ollama_client = OpenAIChatCompletionsModel(model=ApiConfig.LLMA_32_MODEL, openai_client=ollama_openai)
+functiongemma_client = OpenAIChatCompletionsModel(model=ApiConfig.FUNCTIONGEMMA_MODEL, openai_client=ollama_openai) 
+ollama_client = OpenAIChatCompletionsModel(model=ApiConfig.LLMA_32_MODEL, openai_client=ollama_openai) 
+mistral_client = OpenAIChatCompletionsModel(model=ApiConfig.MISTRAL_MODEL, openai_client=ollama_openai)
 ollama3_client = OpenAIChatCompletionsModel(model=ApiConfig.LLMA_3_MODEL, openai_client=ollama_openai)
 qwen3_client = OpenAIChatCompletionsModel(model=ApiConfig.LLMA_QWEN_3_MODEL, openai_client=ollama_openai)
 olmo_3_7b_client = OpenAIChatCompletionsModel(model=ApiConfig.OLMO_3_7B_MODEL, openai_client=ollama_openai)
@@ -43,6 +45,8 @@ model_client_name_dict = {"ollama": ollama_client,
               "qwen3": qwen3_client, 
               "gemma3:1b": gemma1B_client,
               "gemma12B_v": gemma12B_vclient,
+              "mistral": mistral_client,
+              "functiongemma":functiongemma_client,
               "anthropic": anthropic_client,
               "deepseek":deepseek_client,
               "deepseek":deepseek_client,
