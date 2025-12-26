@@ -49,32 +49,6 @@ async def brand_and_min_price() -> List[Dict]:
             raise e
 
 @mcp.tool()
-async def transactional_sql_query_execute(sql_query: str):
-    
-    """ Executes SQL queries against a SQLite database containing car data.
-        Args:
-            sql_query (str): A SQL query string to execute. The function accepts 
-                            queries with or without markdown SQL code block formatting
-        
-        Database:
-            Automatically commit transaction after execution
-            Automatically closes connection after execution
-        
-        Example Usage:
-            transactional_sql_query_execute("INSERT INTO vehicles (brand, model, fuel_type, price)
-            VALUES (?, ?, ?, ?)")
-    """
-
-    with sqlite3.connect(DB) as conn:
-        try:
-            sql = sql_query.strip().removeprefix("```sql").removesuffix("```").strip()
-            cursor = conn.cursor()
-            cursor.execute(sql)
-            conn.commit()
-        except Exception as e:
-            raise e
-        
-@mcp.tool()
 async def sql_query_execute(sql_query: str) -> List[Dict]:
     
     """ Executes SQL queries against a SQLite database containing car data and returns results as a List[Dict].
@@ -102,6 +76,33 @@ async def sql_query_execute(sql_query: str) -> List[Dict]:
         except Exception as e:
             raise e
 
+
+@mcp.tool()
+async def run_transactional_query(sql_query: str) -> None:
+    
+    """ Executes SQL queries against a SQLite database containing car data.
+        Args:
+            sql_query (str): A SQL query string to execute. The function accepts 
+                            queries with or without markdown SQL code block formatting
+        
+        Database:
+            Automatically commit transaction after execution
+            Automatically closes connection after execution
+        
+        Example Usage:
+            transactional_sql_query_execute("INSERT INTO vehicles (brand, model, fuel_type, price)
+            VALUES (?, ?, ?, ?)")
+    """
+
+    with sqlite3.connect(DB) as conn:
+        try:
+            sql = sql_query.strip().removeprefix("```sql").removesuffix("```").strip()
+            cursor = conn.cursor()
+            cursor.execute(sql)
+            conn.commit()
+        except Exception as e:
+            raise e
+        
 if __name__ == "__main__":
     logger.info(f" ✅ 🔄 🎯 Starting the SQL Query MCP Server Content Explorer with STDIO transport ...! 🚀 ")
     

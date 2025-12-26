@@ -2,7 +2,7 @@
 An intelligent virtual assistant for browsing and searching vehicles in a dealership database, featuring natural language interaction and MCP (Model Context Protocol) architecture.
 ## 📋 Table of Contents
 
-## 🎯 Overview**:
+## 🎯 Overview:
 This project implements a conversational virtual assistant that helps users find vehicles in a dealership database. Instead of traditional menu-based interfaces, the assistant engages in natural conversation to understand user preferences and requirements.
 Key Highlights
 
@@ -49,14 +49,22 @@ Before you begin, ensure you have the following installed:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/padeirocarlos/desafio-tecnico-C2S.git
-   curl -fsSL https://ollama.com/install.sh | sh
-   ollama server
-   ollama pull ollama3  # pull one of this model: gemma4B_v gemma12B_v qwen3 gemini ollama3.2 deepseek
-   cd data_processing_agentic
-     1. touch .env ( create this file put your keys)
-     2. change variable name in this files:
-        - agentic/agents_client.py
-        - agentic/api_base_url.py
-   uv add -r requirements.txt
-   uv run app.py
+   - **STEPS**
+      1. git clone https://github.com/padeirocarlos/desafio-tecnico-C2S.git
+         curl -fsSL https://ollama.com/install.sh | sh
+         ollama server
+         ollama pull ollama3  # pull one of this model: gemma4B_v gemma12B_v qwen3 gemini ollama3.2 deepseek
+      2. cd desafio-tecnico-C2S
+         2.1. touch .env ( create this file put your keys)
+         2.2. change variable name in this files:
+            - agentic/agents_client.py
+            - agentic/api_base_url.py
+      3. uv add -r requirements.txt
+         uv run app.py
+
+   - **Running on**:
+      1. local URL:  
+         http://127.0.0.1:7860
+  
+      2. Running on public URL: 
+         output example: https://277d00fc4eb724a0ce.gradio.live

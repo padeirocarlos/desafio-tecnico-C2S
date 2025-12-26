@@ -102,6 +102,21 @@ def format_conversation( messages: List[Any], current_answer:str = "") -> str:
     return conversation
     
 async def general_assist_node(state: WorkflowState) -> WorkflowState:
+    """
+    # This NODE serves as the primary interface between the user and the system,
+    # handling initial contact, conversation management, and content moderation.
+    #
+    # NODE Agent Responsibilities:
+    # - Greet users and establish conversational context
+    # - Interpret user queries and requests in natural language
+    # - Guide users through the vehicle search process with clarifying questions
+    # - Maintain conversation flow and handle edge cases (unclear input, errors)
+    
+    :param state: Description
+    :type state: WorkflowState
+    :return: Description
+    :rtype: WorkflowState
+    """
     
     history = state.get("history", [])
     confidence = state.get("confidence", "LOW")
@@ -155,6 +170,21 @@ async def general_assist_node(state: WorkflowState) -> WorkflowState:
             return {**state, }
 
 async def judging_assist_node(state: WorkflowState) -> WorkflowState:
+    """
+    # This NODE analyzes the dialogue between the user and AI Assistant to intelligently
+    # extract and translate vehicle feature requests into SQL query parameters.
+    #
+    # NODE Agent Responsibilities:
+    # - Parse natural language requests for vehicle features (e.g., "red SUV with sunroof")
+    # - Map user intent to database schema columns and values
+    # - Filter and validate vehicle attributes before query construction
+    # - Handle ambiguous requests by inferring the most likely database fields
+    
+    :param state: Description
+    :type state: WorkflowState
+    :return: Description
+    :rtype: WorkflowState
+    """
     
     cycle = state.get("cycle")
     decision = state.get("decision", "REQ")
@@ -239,6 +269,23 @@ async def judging_assist_node(state: WorkflowState) -> WorkflowState:
         return {**state, }
 
 async def refletion_node(state: WorkflowState) -> WorkflowState:
+    """
+    # This agent analyzes the generated SQL query and refines it based on user needs,
+    # preferences, and query performance characteristics to deliver optimal results.
+    #
+    # Agent Responsibilities:
+    # - Evaluate SQL query efficiency and suggest optimizations (indexes, joins)
+    # - Adjust query scope based on implicit user preferences (e.g., prioritize recent models)
+    # - Add intelligent sorting (ORDER BY) based on likely user intent
+    # - Implement result limits and pagination for large datasets
+    # - Enhance queries with additional relevant filters the user may have forgotten
+    # - Apply business logic rules (e.g., exclude out-of-stock vehicles, prioritize featured listings)
+    
+    :param state: Description
+    :type state: WorkflowState
+    :return: Description
+    :rtype: WorkflowState
+    """
     
     confidence = state.get("confidence", "Low")
     massage_origin = state.get("massage_origin", "UHMassage")
@@ -261,7 +308,23 @@ async def refletion_node(state: WorkflowState) -> WorkflowState:
     
     
 async def sql_generater_node(state: WorkflowState) -> WorkflowState:
+    """
+    # This NODE analyzes the conversation between the user and AI Assistant to construct
+    # optimized SQL queries for retrieving vehicle data from the database.
+    #
+    # NODE Agent Responsibilities:
+    # - Transform filtered vehicle features into valid SQL query syntax
+    # - Build dynamic WHERE clauses based on user-specified criteria
+    # - Optimize query structure for performance (indexes, joins, query complexity)
+    # - Sanitize inputs to prevent SQL injection attacks
+    # - Handle complex queries with multiple filters (AND/OR conditions)
+    # - Generate parameterized queries for database execution
     
+    :param state: Description
+    :type state: WorkflowState
+    :return: Description
+    :rtype: WorkflowState
+    """
     answers = state.get("answers", "")
     summary = state.get("summary", answers)
     sql_query_error = None
@@ -317,7 +380,23 @@ async def sql_generater_node(state: WorkflowState) -> WorkflowState:
     state["massage_origin"] = "sql_generater_node"
     
 async def sql_purify_node(state: WorkflowState) -> WorkflowState:
+    """
+    # This NODE analyzes the generated SQL query and refines it based on user needs,
+    # preferences, and query performance characteristics to deliver optimal results.
+    #
+    # NODE Agent Responsibilities:
+    # - Evaluate SQL query efficiency and suggest optimizations (indexes, joins)
+    # - Adjust query scope based on implicit user preferences (e.g., prioritize recent models)
+    # - Add intelligent sorting (ORDER BY) based on likely user intent
+    # - Implement result limits and pagination for large datasets
+    # - Enhance queries with additional relevant filters the user may have forgotten
+    # - Apply business logic rules (e.g., exclude out-of-stock vehicles, prioritize featured listings)
     
+    :param state: Description
+    :type state: WorkflowState
+    :return: Description
+    :rtype: WorkflowState
+    """
     sql_query = state.get("sql_query", "")
     filter_summary = state.get("summary", "")
     comment = state.get("comment", "")
@@ -379,7 +458,23 @@ async def sql_purify_node(state: WorkflowState) -> WorkflowState:
     state["massage_origin"] = "sql_purify_node"
 
 async def sql_query_execute_node(state: WorkflowState) -> WorkflowState:
+    """
+    # This NODE executes the optimized SQL query against the database and handles
+    # all aspects of query execution, error management, and result retrieval.
+    #
+    # NODE Agent Responsibilities:
+    # - Establish secure database connection with proper credentials
+    # - Execute parameterized SQL queries safely
+    # - Handle database errors and connection failures gracefully
+    # - Monitor query execution time and implement timeouts for long-running queries
+    # - Retrieve and format raw result sets from the database
+    # - Manage database transactions (commit/rollback) when necessary
     
+    :param state: Description
+    :type state: WorkflowState
+    :return: Description
+    :rtype: WorkflowState
+    """
     sql_query = state.get("sql_query", "")
     sql_purify = state.get("sql_purify", sql_query)
 
@@ -391,17 +486,21 @@ async def sql_query_execute_node(state: WorkflowState) -> WorkflowState:
         
     if sql_query or sql_purify:
         start_time = time.perf_counter()
+        run_agent = True
 
         try:
             if not sql_purify and sql_query:
                 sql_purify = sql_query
-            
+                
             try:
-                # sql_result = sql_query_execute(sql_query=sql_query)
-                result = await vehicleAgentic.sql_query_executer_agent(sql_query=sql_query, model_name="mistral") 
-                                                                        # functiongemma mistral gemini gpt-oss:20b deepseek deepseek-r1 qwen3-coder qwen2.5-coder olmo-3:7b
-                comment = result.get("summary")
-                sql_result = result.get("sql_result")
+                if run_agent:
+                    sql_result = sql_query_execute(sql_query=sql_query)
+                    comment = "NO! Comment!"
+                else:
+                    result = await vehicleAgentic.sql_query_executer_agent(sql_query=sql_query, model_name="qwen3") 
+                                                                            # functiongemma mistral gemma12B_v ollama3 gemini gpt-oss:20b deepseek deepseek-r1 qwen3-coder qwen2.5-coder olmo-3:7b
+                    comment = result.get("summary")
+                    sql_result = result.get("sql_result")
                 
                 refined_time = (time.perf_counter() - start_time) * 1000
                 logger.info(f" ✅ 🎯 SQL Query executer node success full. \n SQL Result: {sql_result} \n comment: {comment} \n Completed in : {float(refined_time):.2f}ms")
@@ -420,7 +519,23 @@ async def sql_query_execute_node(state: WorkflowState) -> WorkflowState:
 
 async def synthesize_response_node(state: WorkflowState) -> WorkflowState:
     """
-    Synthesize cars answers into a coherent, comprehensive response.
+    # This NODE transforms raw SQL query results into human-readable, contextual responses
+    # tailored to the user's original question and conversation flow.
+    #
+    # NODE Agent Responsibilities:
+    # - Parse raw database results (rows, columns, data types)
+    # - Analyze conversation context to understand user's intent and preferences
+    # - Synthesize natural language summaries of query results
+    # - Highlight key vehicle features that match user criteria
+    # - Format data for optimal readability (tables, lists, cards)
+    # - Handle edge cases (no results, too many results, partial matches)
+    # - Add helpful suggestions based on results (alternative options, price ranges)
+    # - Generate follow-up questions to refine search if needed
+    
+    :param state: Description
+    :type state: WorkflowState
+    :return: Description
+    :rtype: WorkflowState
     """
     start_time = time.perf_counter()
     
@@ -433,7 +548,7 @@ async def synthesize_response_node(state: WorkflowState) -> WorkflowState:
     logger.info(f"🔗 Processing final response ...")
     
     try:
-        result = await vehicleAgentic.synthesize_response_agent(responses=sql_result, model_name="gemma3:1b") 
+        result = await vehicleAgentic.synthesize_response_agent(responses=sql_result, model_name="deepseek-r1") 
                                     # ollama3 olmo-3:7b gemma3:1b qwen3-coder gemini deepseek qwen3 deepseek-r1 deepseek gemini gpt-oss:20b
         final_response = result["final_response"]
         

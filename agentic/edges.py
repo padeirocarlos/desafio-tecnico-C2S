@@ -11,29 +11,19 @@ from langgraph.types import interrupt, Command
 MAX_QUALITY_TRY = 5
 INTERACTION_NUMBER = 2
 
-# Configure logger
 logger = logging.getLogger("Vehicle-Agentic-Workflow (VAW)")
 
-def route_after_vehicle_info_assist(state: Dict[str, Any]) -> Command[Literal["sql_generater", "END"]]:
-    """
-    Intelligent routing based on general user assist gatharing information and tools use
-    """
-    confidence = state.get("confidence", "Low")
-    
-    # Pause execution; payload shows up under result["__interrupt__"]
-    is_approved = interrupt({
-        "question": "Do you want to proceed with this action?",
-        "details": state["action_details"]})
-
-    # Route based on the response
-    if is_approved:
-        logger.info(f"🔄 ⚠️ Routing to General Assist node : {str(confidence).upper()}")
-        return Command(goto="sql_generater")  # Runs after the resume payload is provided
-    else:
-        logger.info(f"🔀 ✅ Routing to SQL Generater node : {str(confidence).upper()}!")
-        return Command(goto="general_assist")
-
 def route_after_general_assist(state: Dict[str, Any]) -> Literal[ "judging_assist", "END"]:
+    """
+     AGENT: Post-General Assistance Router (edges after_general_assist)
+        This routing agent determines the next workflow step after the general assistance
+        agent handles user interaction, directing the flow based on user intent classification
+        and conversation state.
+    
+    :param state: Description
+    :type state: Dict[str, Any]
+    :rtype: Literal['judging_assist', 'END']
+    """
     
     massage_origin = state.get("massage_origin")
     interaction_number = state.get("interaction_number")
@@ -45,7 +35,14 @@ def route_after_general_assist(state: Dict[str, Any]) -> Literal[ "judging_assis
     
 def route_after_judging_assist(state: Dict[str, Any]) -> Literal["sql_generater", "general_assist", "END"]:
     """
-    Intelligent routing based on general user assist results level of confidence
+     AGENT: Post-Judgment Router (edges after_judging_assist)
+        This routing agent evaluates the assistant's judgment/decision and determines
+        the appropriate next step in the workflow based on the quality, completeness,
+        and confidence of the judgment made.
+    
+    :param state: Description
+    :type state: Dict[str, Any]
+    :rtype: Literal['sql_generater', 'general_assist', 'END']
     """
     decision = state.get("decision","")
     summary = state.get("summary","")
@@ -63,7 +60,13 @@ def route_after_judging_assist(state: Dict[str, Any]) -> Literal["sql_generater"
 
 def route_after_sql_generater(state: Dict[str, Any]) -> Literal["sql_query_execute", "refletion"]:
     """
-    Intelligent routing based on general user assist results level of confidence
+        This routing agent determines the next workflow step after SQL query generation,
+        directing the process flow based on query characteristics, validation results,
+        and system state.
+    
+    :param state: Description
+    :type state: Dict[str, Any]
+    :rtype: Literal['sql_query_execute', 'refletion']
     """
     sql_query = state.get("sql_query", "")
     confidence = state.get("confidence", "Low")
@@ -77,7 +80,14 @@ def route_after_sql_generater(state: Dict[str, Any]) -> Literal["sql_query_execu
 
 def route_after_sql_purify(state: Dict[str, Any]) -> Literal["sql_query_execute", "refletion"]:
     """
-    Intelligent routing based on general user assist results level of confidence
+        AGENT: Post-SQL Purification Router (edges after_sql_purify)
+        This routing agent evaluates the purified/sanitized SQL query and determines
+        the next workflow step based on security validation, query safety assessment,
+        and purification results.
+    
+    :param state: Description
+    :type state: Dict[str, Any]
+    :rtype: Literal['sql_query_execute', 'refletion']
     """
     sql_purify = state.get("sql_purify", "")
     confidence = state.get("confidence", "Low")
@@ -90,6 +100,16 @@ def route_after_sql_purify(state: Dict[str, Any]) -> Literal["sql_query_execute"
         return "sql_query_execute"
 
 def route_after_refletion(state: Dict[str, Any]) -> Literal["general_assist", "sql_purify", "sql_generater"]:
+    """
+    AGENT: Post-Reflection Router (edges after_reflection)
+    This routing agent evaluates the reflection/self-assessment results and determines
+    the next workflow step based on quality checks, performance evaluation, and
+    identified improvement opportunities.
+    
+    :param state: Description
+    :type state: Dict[str, Any]
+    :rtype: Literal['general_assist', 'sql_purify', 'sql_generater']
+    """
     
     massage_origin = state.get("massage_origin", "UHMassage")
     

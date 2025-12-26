@@ -127,6 +127,11 @@ class VehicleChat:
         self.graph = await workflow_app(self.memory)
     
     async def run_superstep(self, message, history):
+        """
+        :param self: Description
+        :param message: Description
+        :param history: Description
+        """
         config = {"configurable": {"thread_id": self.vehiclechat_id}}
         
         state = WorkflowState()
@@ -182,6 +187,11 @@ class VehicleChat:
         return history_ + [user, reply]
 
 async def process_message(vehicleChat, message, history):
+    """
+    :param vehicleChat: Description
+    :param message: Description
+    :param history: Description
+    """
     
     if not message or message.strip() == "":
         return "#### ⚠️ Please enter some Query to Vehicle Seller Assistant (VSA) AI first!", history, vehicleChat, None

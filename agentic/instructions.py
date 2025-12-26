@@ -379,7 +379,7 @@ def sql_query_executer(sql_query:str) -> str:
     prompt1 = f""" 
         IMPORTANT:
         - You must exclusively use only this tools sql_query_execute(sql_query='{sql_query}') provided 
-          in mcp_server to execute this given tool sql_query_execute(sql_query'{sql_query}') to retrieve the list of vehicle
+          in mcp_server to execute this given tool sql_query_execute(sql_query'{sql_query}') to retrieve the list of vehicles
         - Do not use any other tools, methods, or approaches for this task."""
     
     prompt2 = f"""  
@@ -407,19 +407,20 @@ def sql_query_executer(sql_query:str) -> str:
         _prompt = prompt2
     
     prompt = f""" 
-        You are expert in executing a SQL Query. Given tools from mcp_server to execute SQL query sucess full in SQLite. 
-        Do not add, assume, or infer any details beyond what is returned by tool from mcp_server.
+        You are expert in executing a SQL Query. Given tools execute SQL query sucess full. 
+        Do not add, assume, or infer any details beyond what is returned by tool.
         The current date and time is {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
         
         {_prompt}
         
-        Once you have enough evaluation information, 
-        respond in this STRICT format:
-        {{
-            "comment":"Here detailed 2-3 sentences explaining the meaning of the sql query result",
-            "sql_result":"here the results vehicles extract from tools execution"
-        }}
+        Once you have enough information,respond in this STRICT format: {{"sql_result": "sql_result"}} here the results vehicles extract from tools execution
         """
+        # Once you have enough evaluation information, 
+        # respond in this STRICT format:
+        # {{
+        #     "comment":"Here detailed 2-3 sentences explaining the meaning of the sql query result",
+        #     "sql_result":"here the results vehicles extract from tools execution"
+        # }}
     return prompt
 
 def synthesize_response(sql_query_response:str) -> str: 
